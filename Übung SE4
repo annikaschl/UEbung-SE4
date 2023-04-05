@@ -1,0 +1,137 @@
+import json
+import os
+from datetime import datetime
+
+dateiJSONModul1 =  "/home/ubuntu/newproject/app/static/Inhalte_Modul1.json"
+dateiCSVModul1 = "/home/ubuntu/newproject/app/static/Inhalte_Modul1.csv"
+
+def tabellenzeileErstellen(nr, modul, teilmodul, datum, anfang, ende, kommentar):
+    eintragModul1 = {
+        "Nr": nr,
+        "Modul": modul,
+        "Teilmodul": teilmodul,
+        "Datum": datum,
+        "Anfang": anfang,
+        "Ende": ende,
+        "Kommentar": kommentar
+    }
+    return eintragModul1
+
+def jsonLesen():
+    with open(dateiJSONModul1, "r") as datei:
+        listeZeiterfassung_Modul1 = json.loads(datei.read())
+    return listeZeiterfassung_Modul1
+
+def neuerInhalt(inhalt):
+    ausgabe = jsonLesen()
+    with open (dateiJSONModul1, "w") as datei:
+        ausgabe.append(inhalt)
+        datei.write(json.dumps(ausgabe))
+
+#Erweiterung:
+#Module sortieren:
+
+def moduleSortieren():
+    with open(dateiJSONModul1, "r") as datei:
+        content = json.loads(datei.read())
+    
+    listeInformatikundEinführung = []
+    listeEGovernmentmitExkusionen = []
+    listeBetriebsundKommunikationssysteme = []
+    listeVorgehensmodellederSoftwareentwicklung = []
+    listeSystemanalyseundSoftwareentwurfundImplementierung = []
+    listeCybersecurityundITIL = []
+    listeITManagement = []
+    listeITSystemeundInformationssysteme = []
+
+
+    for eintrag in content:
+        
+        if eintrag["Modul"] == "1.1 Informatik und Einführung und Vertiefung" and eintrag["Teilmodul"] == "1.1.1 Einführung in die Informatik" or "1.1.2 Vertiefung Informatik":
+            listeInformatikundEinführung.append(eintrag)
+
+        if eintrag["Modul"] == "1.2 E-Government mit Exkursionen":
+            listeEGovernmentmitExkusionen.append(eintrag)
+
+        if eintrag["Modul"] == "1.3 Betriebs- und Kommunikationssysteme/verteilte Systeme" and eintrag["Teilmodul"] == "1.3.1 Betriebs- und Kommunikationssysteme" or "1.3.2 Verteilte Systeme" or "1.3.3 Aktuelle Anwendungen erproben":
+            listeBetriebsundKommunikationssysteme.append(eintrag)
+
+        if eintrag["Modul"] == "1.4 Vorgehensmodelle der Softwareentwicklung" and eintrag["Teilmodul"] == "1.4.1 Vorgehensmodelle (SE 1)" or "1.4.2 Requirements-Engineering und -Mangagement (SE 2)":
+            listeVorgehensmodellederSoftwareentwicklung.append(eintrag)
+
+        if eintrag["Modul"] == "1.5 Systemanalyse, Softwareentwurf und Implementierung" and eintrag["Teilmodul"] == "1.5.1 Systemanalyse (SE 3)" or "1.5.2 Softwareentwurf und Implementierung (SE 4)" or "1.5.3 Softwarequalität und Test (SE 5)":
+            listeSystemanalyseundSoftwareentwurfundImplementierung.append(eintrag)
+
+        if eintrag["Modul"] == "1.6 Cypersecurity und ITIL" and eintrag["Teilmodul"] == "1.6.1 Cypersecurity" or "1.6.2 ITIL":
+            listeCybersecurityundITIL.append(eintrag)
+
+        if eintrag["Modul"] == "1.7 IT-Management":
+            listeITManagement.append(eintrag)
+
+        if eintrag["Modul"] == "1.8 IT-Systeme und Informationssysteme":
+            listeITSystemeundInformationssysteme.append(eintrag)
+
+    with open(dateiJSONModul1, "w") as datei:
+
+        content = []
+
+        for eintrag in listeInformatikundEinführung:
+            content.append(eintrag)
+
+        for eintrag in listeEGovernmentmitExkusionen:
+            content.append(eintrag)
+
+        for eintrag in listeBetriebsundKommunikationssysteme:
+            content.append(eintrag)
+
+        for eintrag in listeVorgehensmodellederSoftwareentwicklung:
+            content.append(eintrag)
+
+        for eintrag in listeSystemanalyseundSoftwareentwurfundImplementierung:
+            content.append(eintrag)
+
+        for eintrag in listeCybersecurityundITIL:
+            content.append(eintrag)
+
+        for eintrag in listeITManagement:
+            content.append(eintrag)
+
+        for eintrag in listeITSystemeundInformationssysteme:
+            content.append(eintrag)
+
+        datei.write(json.dumps(content))
+    
+    with open(dateiJSONModul1, "r") as datei:
+        inhalt = json.loads(datei.read())
+
+
+#CSV erstellen (herunterladen)
+
+def erstelleCSV(content):
+    with open(dateiJSONModul1, "r")as datei:
+        dict = json.loads(datei.read())
+
+    content = ""
+
+    for eintrag in dict:
+        neueZeile = f"{eintrag['Nr']}, {eintrag['Modul']}, {eintrag['Teilmodul']}, {eintrag['Datum']}, {eintrag['Anfang']}, {eintrag['Ende']}, {eintrag['Kommentar']}\n"
+        content += neueZeile
+
+    with open(dateiCSVModul1, "w", encoding = "utf-8")as datei:
+        datei.write(content)
+
+#Zeit berechnen
+
+"""
+def zeitberechnen(anfang, ende):
+
+    anfangszeit = datetime.strptime(anfang, "%H:%M")
+    endzeit = datetime.strptime(ende, "%H:%M")
+
+    formel = endzeit - anfangszeit
+
+    formel = datetime.strptime(str(formel), "%H:%M:%S")
+
+    return formel.strftime("%H:%M")
+"""
+
